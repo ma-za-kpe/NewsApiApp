@@ -17,9 +17,12 @@ class GetNetworkNews @Inject constructor(
   suspend operator fun invoke(category: String) {
     val articles = newsRepository.getNewsFromNetwork(category)
     // do caching here
-    if (category == "sports") {
-      newsRepository.storeBusinessArticles(articles)
-    }
+    newsRepository.storeArticles(articles, category)
+//    if (category == "business") {
+//      newsRepository.storeBusinessArticles(articles)
+//    } else if (category == "sports") {
+//      newsRepository.storeBusinessArticles(articles)
+//    }
   }
 }
 //  return articles

@@ -1,13 +1,14 @@
 package com.maku.newsapiapp.newsbycategory
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Article
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -28,47 +29,152 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maku.newsapiapp.core.domain.model.DomainArticle
 import com.maku.newsapiapp.newsbycategory.ui.ArticleUiState
+import com.maku.newsapiapp.newsbycategory.ui.ArticlesViewState
 import com.maku.newsapiapp.newsbycategory.ui.NewsByCategoryViewModel
 import com.maku.newsapiapp.ui.theme.NewsApiAppTheme
 
 @Composable
-fun ArticleScreen(
+fun BusinessArticleScreen(
+    category: String,
     viewModel: NewsByCategoryViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.articleState.collectAsStateWithLifecycle()
-    ArticleList(
-        uiState,
-        viewModel::fetchNetworkData
-    )
+    val articleViewState by viewModel.state.collectAsStateWithLifecycle()
+    LazyColumn {
+        if (articleViewState.loading){
+            item {
+                CircularProgressIndicator()
+            }
+        }
+        if (articleViewState.business.isEmpty()){
+            viewModel.fetchNetworkData(category)
+        }
+        listOfArticles(articleViewState.business)
+    }
 }
 
 @Composable
-fun ArticleList(
-    uiState: ArticleUiState,
-    fetchNetworkData: () -> Unit,
+fun EntertainmentArticleScreen(
+    category: String,
+    viewModel: NewsByCategoryViewModel = hiltViewModel(),
 ) {
+    val articleViewState by viewModel.state.collectAsStateWithLifecycle()
+    LazyColumn {
+        if (articleViewState.loading){
+            item {
+                CircularProgressIndicator()
+            }
+        }
+        if (articleViewState.entertainment.isEmpty()){
+            Log.d("TAG", "ArticleList: entertainment is empty")
+            viewModel.fetchNetworkData(category)
+        }
+        listOfArticles(articleViewState.entertainment)
+    }
+}
 
-    when (uiState) {
-        is ArticleUiState.Loading -> {
-            CircularProgressIndicator()
-        }
-        is ArticleUiState.Success -> {
-            if (uiState.articles.isEmpty()) {
-                // pass down category here
-                // this only runs once, here you can trigger the first network call, howevere
-                // TODO: 03, i believe there are better ways to handle initial data loading, eg, using splash screen api, or in an app start up configuration
-                fetchNetworkData()
-            }
-            LazyColumn {
-                items(uiState.articles) { article ->
-                    Article(
-                        title = article.title,
-                        date = article.publishedAt,
-                        url = article.url
-                    )
-                }
+@Composable
+fun SportsArticleScreen(
+    category: String,
+    viewModel: NewsByCategoryViewModel = hiltViewModel(),
+) {
+    val articleViewState by viewModel.state.collectAsStateWithLifecycle()
+    LazyColumn {
+        if (articleViewState.loading){
+            item {
+                CircularProgressIndicator()
             }
         }
+        if (articleViewState.sports.isEmpty()){
+            Log.d("TAG", "ArticleList: entertainment is empty")
+            viewModel.fetchNetworkData(category)
+        }
+        listOfArticles(articleViewState.sports)
+    }
+}
+
+@Composable
+fun GeneralArticleScreen(
+    category: String,
+    viewModel: NewsByCategoryViewModel = hiltViewModel(),
+) {
+    val articleViewState by viewModel.state.collectAsStateWithLifecycle()
+    LazyColumn {
+        if (articleViewState.loading){
+            item {
+                CircularProgressIndicator()
+            }
+        }
+        if (articleViewState.general.isEmpty()){
+            viewModel.fetchNetworkData(category)
+        }
+        listOfArticles(articleViewState.general)
+    }
+}
+
+@Composable
+fun HealthArticleScreen(
+    category: String,
+    viewModel: NewsByCategoryViewModel = hiltViewModel(),
+) {
+    val articleViewState by viewModel.state.collectAsStateWithLifecycle()
+    LazyColumn {
+        if (articleViewState.loading){
+            item {
+                CircularProgressIndicator()
+            }
+        }
+        if (articleViewState.health.isEmpty()){
+            viewModel.fetchNetworkData(category)
+        }
+        listOfArticles(articleViewState.health)
+    }
+}
+
+@Composable
+fun ScienceArticleScreen(
+    category: String,
+    viewModel: NewsByCategoryViewModel = hiltViewModel(),
+) {
+    val articleViewState by viewModel.state.collectAsStateWithLifecycle()
+    LazyColumn {
+        if (articleViewState.loading){
+            item {
+                CircularProgressIndicator()
+            }
+        }
+        if (articleViewState.science.isEmpty()){
+            viewModel.fetchNetworkData(category)
+        }
+        listOfArticles(articleViewState.science)
+    }
+}
+
+@Composable
+fun TechnologyArticleScreen(
+    category: String,
+    viewModel: NewsByCategoryViewModel = hiltViewModel(),
+) {
+    val articleViewState by viewModel.state.collectAsStateWithLifecycle()
+    LazyColumn {
+        if (articleViewState.loading){
+            item {
+                CircularProgressIndicator()
+            }
+        }
+        if (articleViewState.technology.isEmpty()){
+            viewModel.fetchNetworkData(category)
+        }
+        listOfArticles(articleViewState.technology)
+    }
+}
+
+private fun LazyListScope.listOfArticles(articles: List<DomainArticle>) {
+    items(articles) { article ->
+        Article(
+            title = article.title,
+            date = article.publishedAt,
+            url = article.url
+        )
     }
 }
 
@@ -129,68 +235,3 @@ fun ArticlePreview() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ArticleListPreview() {
-    NewsApiAppTheme {
-        ArticleList(
-            ArticleUiState.Success(
-                listOf( // TODO: you can also move this out of here and simply reference it
-                    DomainArticle(
-                        author = "ESPN",
-                        title = "James volvió a jugar en Olympiacos, que venció a PAOK - ESPN",
-                        description = "",
-                        url = "https://news.google.com/rss/articles/CBMiZmh0dHBzOi8vd3d3LmVzcG4uY29tLmFyL2Z1dGJvbC9ub3RhL18vaWQvMTE4NTc4MTYvamFtZXMtdm9sdmlvLWEtanVnYXItZW4tb2x5bXBpYWNvcy1xdWUtdmVuY2lvLWEtcGFva9IBc2h0dHBzOi8vd3d3LmVzcG4uY29tLmFyL2Z1dGJvbC9ub3RhL18vaWQvMTE4NTc4MTYvamFtZXMtdm9sdmlvLWEtanVnYXItZW4tb2x5bXBpYWNvcy1xdWUtdmVuY2lvLWEtcGFvaz9wbGF0Zm9ybT1hbXA?oc=5",
-                        urlToImage = "",
-                        publishedAt = "2023-04-05T20:36:35Z",
-                        source = DomainArticle.Source(
-                            id = "google-news",
-                            name = "Google News"
-                        ),
-                        content = ""
-                    ),
-                    DomainArticle(
-                        author = "ESPN",
-                        title = "James volvió a jugar en Olympiacos, que venció a PAOK - ESPN",
-                        description = "",
-                        url = "https://news.google.com/rss/articles/CBMiZmh0dHBzOi8vd3d3LmVzcG4uY29tLmFyL2Z1dGJvbC9ub3RhL18vaWQvMTE4NTc4MTYvamFtZXMtdm9sdmlvLWEtanVnYXItZW4tb2x5bXBpYWNvcy1xdWUtdmVuY2lvLWEtcGFva9IBc2h0dHBzOi8vd3d3LmVzcG4uY29tLmFyL2Z1dGJvbC9ub3RhL18vaWQvMTE4NTc4MTYvamFtZXMtdm9sdmlvLWEtanVnYXItZW4tb2x5bXBpYWNvcy1xdWUtdmVuY2lvLWEtcGFvaz9wbGF0Zm9ybT1hbXA?oc=5",
-                        urlToImage = "",
-                        publishedAt = "2023-04-05T20:36:35Z",
-                        source = DomainArticle.Source(
-                            id = "google-news",
-                            name = "Google News"
-                        ),
-                        content = ""
-                    ),
-                    DomainArticle(
-                        author = "ESPN",
-                        title = "James volvió a jugar en Olympiacos, que venció a PAOK - ESPN",
-                        description = "",
-                        url = "https://news.google.com/rss/articles/CBMiZmh0dHBzOi8vd3d3LmVzcG4uY29tLmFyL2Z1dGJvbC9ub3RhL18vaWQvMTE4NTc4MTYvamFtZXMtdm9sdmlvLWEtanVnYXItZW4tb2x5bXBpYWNvcy1xdWUtdmVuY2lvLWEtcGFva9IBc2h0dHBzOi8vd3d3LmVzcG4uY29tLmFyL2Z1dGJvbC9ub3RhL18vaWQvMTE4NTc4MTYvamFtZXMtdm9sdmlvLWEtanVnYXItZW4tb2x5bXBpYWNvcy1xdWUtdmVuY2lvLWEtcGFvaz9wbGF0Zm9ybT1hbXA?oc=5",
-                        urlToImage = "",
-                        publishedAt = "2023-04-05T20:36:35Z",
-                        source = DomainArticle.Source(
-                            id = "google-news",
-                            name = "Google News"
-                        ),
-                        content = ""
-                    ),
-                    DomainArticle(
-                        author = "ESPN",
-                        title = "James volvió a jugar en Olympiacos, que venció a PAOK - ESPN",
-                        description = "",
-                        url = "https://news.google.com/rss/articles/CBMiZmh0dHBzOi8vd3d3LmVzcG4uY29tLmFyL2Z1dGJvbC9ub3RhL18vaWQvMTE4NTc4MTYvamFtZXMtdm9sdmlvLWEtanVnYXItZW4tb2x5bXBpYWNvcy1xdWUtdmVuY2lvLWEtcGFva9IBc2h0dHBzOi8vd3d3LmVzcG4uY29tLmFyL2Z1dGJvbC9ub3RhL18vaWQvMTE4NTc4MTYvamFtZXMtdm9sdmlvLWEtanVnYXItZW4tb2x5bXBpYWNvcy1xdWUtdmVuY2lvLWEtcGFvaz9wbGF0Zm9ybT1hbXA?oc=5",
-                        urlToImage = "",
-                        publishedAt = "2023-04-05T20:36:35Z",
-                        source = DomainArticle.Source(
-                            id = "google-news",
-                            name = "Google News"
-                        ),
-                        content = ""
-                    )
-                )
-            ),
-            {}
-        )
-    }
-}

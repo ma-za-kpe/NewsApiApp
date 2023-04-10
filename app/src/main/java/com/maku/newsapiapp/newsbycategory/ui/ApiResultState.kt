@@ -23,5 +23,18 @@ sealed interface ArticleUiState {
          * The list of article resources contained in this feed.
          */
         val articles: List<DomainArticle>, // TODO: replace this with presentation domain
+//        val entertainment: List<DomainArticle>,
     ) : ArticleUiState
 }
+
+data class ArticlesViewState(
+    val loading: Boolean = true,
+    val business: List<DomainArticle> = emptyList(),
+    val entertainment: List<DomainArticle> = emptyList(),
+    val general: List<DomainArticle> = emptyList(),
+    val health: List<DomainArticle> = emptyList(),
+    val technology: List<DomainArticle> = emptyList(),
+    val science: List<DomainArticle> = emptyList(),
+    val sports: List<DomainArticle> = emptyList(),
+)
+

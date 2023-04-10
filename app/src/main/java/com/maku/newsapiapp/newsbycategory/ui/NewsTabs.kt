@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -25,11 +26,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.maku.newsapiapp.newsbycategory.ArticleScreen
+import com.maku.newsapiapp.newsbycategory.BusinessArticleScreen
+import com.maku.newsapiapp.newsbycategory.EntertainmentArticleScreen
+import com.maku.newsapiapp.newsbycategory.GeneralArticleScreen
+import com.maku.newsapiapp.newsbycategory.HealthArticleScreen
+import com.maku.newsapiapp.newsbycategory.ScienceArticleScreen
+import com.maku.newsapiapp.newsbycategory.SportsArticleScreen
+import com.maku.newsapiapp.newsbycategory.TechnologyArticleScreen
 import com.maku.newsapiapp.ui.theme.NewsApiAppTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class) // TODO: move these optin messages to the build.gradle file
+@OptIn(ExperimentalPagerApi::class) // TODO: move these optIn messages to the build.gradle file
 @Composable
 fun NewsTabs(
     modifier: Modifier = Modifier,
@@ -41,21 +48,20 @@ fun NewsTabs(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
+            .padding(10.dp),
     ) {
         // Create references for the composables to constrain
         val (tabs, pager) = createRefs()
 
-        TabRow(
+        ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
             modifier = Modifier
                 .constrainAs(tabs) {
-                    top.linkTo(parent.top, 16.dp)
-                    start.linkTo(parent.start, 16.dp)
-                    end.linkTo(parent.end, 16.dp)
+                    top.linkTo(parent.top, 8.dp)
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
                     width = Dimension.fillToConstraints
-                }
-                .padding(15.dp, 0.dp, 15.dp, 0.dp)
-                .fillMaxWidth(),
+                },
             containerColor = Color.Transparent,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
@@ -109,8 +115,8 @@ fun NewsTabs(
                         Text(
                             text = item.title,
                             color = textColor,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            modifier = Modifier
+                                .fillMaxWidth()
                         )
                     },
                     selectedContentColor = MaterialTheme.colorScheme.primaryContainer,
@@ -123,8 +129,8 @@ fun NewsTabs(
             modifier = Modifier
                 .constrainAs(pager) {
                     top.linkTo(tabs.bottom)
-                    start.linkTo(parent.start, 12.dp)
-                    end.linkTo(parent.end, 12.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
                 },
             state = pagerState
@@ -146,14 +152,52 @@ fun DefaultPreview() {
 // TODO: move these into there own classes
 val tabRowItems = listOf(
     TabRowItem(
+        title = "Business",
+        screen = {
+            BusinessArticleScreen("business")
+        }
+    ),
+    TabRowItem(
+        title = "Entertainment",
+        screen = {
+            EntertainmentArticleScreen("entertainment")
+        }
+    ),
+    TabRowItem(
         title = "Sports",
         screen = {
-            ArticleScreen()
+            SportsArticleScreen("sports")
+        }
+    ),
+    TabRowItem(
+        title = "General",
+        screen = {
+            GeneralArticleScreen("general")
+        }
+    ),
+    TabRowItem(
+        title = "Health",
+        screen = {
+            HealthArticleScreen("health")
+        }
+    ),
+    TabRowItem(
+        title = "Science",
+        screen = {
+            ScienceArticleScreen("science")
+        }
+    ),
+    TabRowItem(
+        title = "Technology",
+        screen = {
+            TechnologyArticleScreen("technology")
         }
     )
+// general, health, science technology
 )
 
 data class TabRowItem(
     val title: String,
     val screen: @Composable () -> Unit
 )
+

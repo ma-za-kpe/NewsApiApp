@@ -15,7 +15,8 @@ class ApiArticleMapper @Inject constructor() : ApiMapper<Article?, DomainArticle
             source = mapToSource(apiEntity),
             title = apiEntity?.title.orEmpty(),
             url = apiEntity?.url.orEmpty(),
-            urlToImage = apiEntity?.urlToImage.orEmpty()
+            urlToImage = apiEntity?.urlToImage.orEmpty(),
+            category = ""
         )
     }
 

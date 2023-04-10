@@ -1,14 +1,12 @@
 package com.maku.newsapiapp.core.data
 
-import android.util.Log
 import com.maku.newsapiapp.core.data.api.NewsApi
 import com.maku.newsapiapp.core.data.api.model.mapper.ApiArticleMapper
-import com.maku.newsapiapp.core.data.cache.model.CachedArticle
+import com.maku.newsapiapp.core.data.cache.model.CacheArticle
 import com.maku.newsapiapp.core.data.cache.repo.NewsCache
 import com.maku.newsapiapp.core.domain.exception.NetworkException
 import com.maku.newsapiapp.core.domain.model.DomainArticle
 import com.maku.newsapiapp.core.domain.repo.NewsRepository
-import com.maku.newsapiapp.newsbycategory.ui.ArticleUiState
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -21,18 +19,34 @@ class NewsRepositoryImpl @Inject constructor(
     private val cache: NewsCache,
     private val articleMapper: ApiArticleMapper
 ) : NewsRepository {
-    override suspend fun storeBusinessArticles(articles: List<DomainArticle>) {
-        cache.storeBusinessArticles(articles.map { CachedArticle.fromDomain(it) })
-    }
-
-    override fun getArticlesFromCache(): Flow<List<DomainArticle>> {
-        return cache.getBusinessArticles()
-            .map { it ->
-                it.map {
-                    it.toDomain()
-                }
-            }
-    }
+//    override suspend fun storeBusinessArticles(articles: List<DomainArticle>) {
+////        val newList = articles.toMutableList().forEach {
+////            it.author = ""
+////        }
+//        cache.storeBusinessArticles(articles.map { BusinessArticles.fromDomain(it) })
+//    }
+//
+//    override fun getBusinessArticlesFromCache(): Flow<List<DomainArticle>> {
+//        return cache.getBusinessArticles()
+//            .map { it ->
+//                it.map {
+//                    it.toDomain()
+//                }
+//            }
+//    }
+//
+//    override suspend fun storeSportsArticles(articles: List<DomainArticle>) {
+//        cache.storeSportsArticles(articles.map { SportsArticles.fromDomain(it) })
+//    }
+//
+//    override fun getSportsArticlesFromCache(): Flow<List<DomainArticle>> {
+//        return cache.getSportsArticlesFromCache()
+//            .map { it ->
+//                it.map {
+//                    it.toDomain()
+//                }
+//            }
+//    }
 
     override suspend fun getNewsFromNetwork(category: String): List<DomainArticle> {
 //        return flow {
@@ -62,6 +76,40 @@ class NewsRepositoryImpl @Inject constructor(
                 throw Exception(e)
             }
         }
+    }
+
+    override suspend fun storeArticles(
+        articles: List<DomainArticle>,
+        category: String
+    ) {
+        val mutableList: MutableList<DomainArticle> = articles.toMutableList()
+        mutableList.map {
+            it.category = category
+        }
+
+        cache.storeArticles(
+            mutableList.toList().map {
+                CacheArticle.fromDomain(it)
+            }
+        )
+    }
+
+    override fun getArticlesByCategory(category: String): Flow<List<DomainArticle>> {
+        return cache.getArticlesByCategory(category)
+            .map { it ->
+                it.map {
+                    it.toDomain()
+                }
+            }
+    }
+
+    override fun getArticles(): Flow<List<DomainArticle>> {
+        return cache.getArticles()
+            .map { it ->
+                it.map {
+                    it.toDomain()
+                }
+            }
     }
 }
 
