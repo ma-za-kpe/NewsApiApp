@@ -8,12 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.maku.newsapiapp.newsbycategory.ui.NewsTabs
+import com.maku.newsapiapp.AppState
+import com.maku.newsapiapp.ui.home.NewsTabs
 
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
     startDestination: String,
+    appState: AppState,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -24,6 +26,7 @@ fun MainNavGraph(
           route = "tabs",
       ) {
           NewsTabs(
+              appState= appState,
               modifier = modifier
           )
       }

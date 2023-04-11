@@ -1,13 +1,11 @@
 package com.maku.newsapiapp.ui.vm
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maku.newsapiapp.core.utils.snackbar.SnackbarManager
 import com.maku.newsapiapp.core.utils.snackbar.SnackbarMessage.Companion.toSnackbarMessage
-import com.maku.newsapiapp.newsbycategory.domain.GetLocalNews
-import com.maku.newsapiapp.newsbycategory.domain.GetNetworkNews
+import com.maku.newsapiapp.domain.usecase.GetLocalNews
+import com.maku.newsapiapp.domain.usecase.GetNetworkNews
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope

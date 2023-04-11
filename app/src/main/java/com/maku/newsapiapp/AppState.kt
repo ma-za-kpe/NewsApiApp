@@ -11,6 +11,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
 import com.maku.newsapiapp.core.utils.snackbar.SnackbarManager
 import com.maku.newsapiapp.core.utils.snackbar.SnackbarMessage.Companion.toMessage
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +25,7 @@ fun rememberAppState(
     snackbarManager: SnackbarManager = SnackbarManager,
     resources: Resources = resources(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    pagerState: PagerState = rememberPagerState(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ): AppState {
     return remember(
@@ -30,6 +33,7 @@ fun rememberAppState(
         snackbarManager,
         resources,
         coroutineScope,
+        pagerState,
         snackbarHostState
     ) {
         AppState(
@@ -37,6 +41,7 @@ fun rememberAppState(
             snackbarManager,
             resources,
             coroutineScope,
+            pagerState,
             snackbarHostState
         )
     }
@@ -54,7 +59,8 @@ class AppState(
     val navController: NavHostController,
     val snackbarManager: SnackbarManager,
     val resources: Resources,
-    coroutineScope: CoroutineScope,
+    val coroutineScope: CoroutineScope,
+    val pagerState: PagerState,
     val snackbarHostState: SnackbarHostState
 ) {
 
