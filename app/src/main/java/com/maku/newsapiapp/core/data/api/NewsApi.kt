@@ -12,6 +12,6 @@ interface NewsApi {
     suspend fun getNewsByCategory(
         @Query(ApiParameters.CATEGORY) category: String,
         // TODO: hide this key
-        @Query(ApiParameters.API_KEY) apiKey: String = "17e807cde35245aabcbc2920a27f6837",
+        @Query(ApiParameters.API_KEY) apiKey: String = "44cc37857e84439e93c71434a66e41d2",
     ): News
 }

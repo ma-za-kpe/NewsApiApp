@@ -9,7 +9,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -26,13 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.maku.newsapiapp.newsbycategory.BusinessArticleScreen
-import com.maku.newsapiapp.newsbycategory.EntertainmentArticleScreen
-import com.maku.newsapiapp.newsbycategory.GeneralArticleScreen
-import com.maku.newsapiapp.newsbycategory.HealthArticleScreen
-import com.maku.newsapiapp.newsbycategory.ScienceArticleScreen
-import com.maku.newsapiapp.newsbycategory.SportsArticleScreen
-import com.maku.newsapiapp.newsbycategory.TechnologyArticleScreen
+import com.maku.newsapiapp.newsbycategory.ArticleScreen
 import com.maku.newsapiapp.ui.theme.NewsApiAppTheme
 import kotlinx.coroutines.launch
 
@@ -48,7 +40,6 @@ fun NewsTabs(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .padding(10.dp),
     ) {
         // Create references for the composables to constrain
         val (tabs, pager) = createRefs()
@@ -61,7 +52,8 @@ fun NewsTabs(
                     start.linkTo(parent.start, 8.dp)
                     end.linkTo(parent.end, 8.dp)
                     width = Dimension.fillToConstraints
-                },
+                }
+                .padding(0.dp, 0.dp, 0.dp, 8.dp),
             containerColor = Color.Transparent,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
@@ -77,10 +69,6 @@ fun NewsTabs(
         ) {
             tabRowItems.forEachIndexed { index, item ->
                 val selected = pagerState.currentPage == index
-                if (selected) {
-                    // TODO: Attempting to maintain the dynamic nature of the app, all while keeping the code in the viewmodel dry, but im sure there is a better way to handle this matter
-                    viewModel.onCategorySelected(item.title)
-                }
                 val backgroundColor = if (selected) {
                     MaterialTheme.colorScheme.primaryContainer
                 } else {
@@ -126,7 +114,7 @@ fun NewsTabs(
         }
         HorizontalPager(
             count = tabRowItems.size,
-            modifier = Modifier
+            modifier = modifier
                 .constrainAs(pager) {
                     top.linkTo(tabs.bottom)
                     start.linkTo(parent.start)
@@ -154,46 +142,45 @@ val tabRowItems = listOf(
     TabRowItem(
         title = "Business",
         screen = {
-            BusinessArticleScreen("business")
+            ArticleScreen("business")
         }
     ),
     TabRowItem(
         title = "Entertainment",
         screen = {
-            EntertainmentArticleScreen("entertainment")
+            ArticleScreen("entertainment")
         }
     ),
     TabRowItem(
         title = "Sports",
         screen = {
-            SportsArticleScreen("sports")
+            ArticleScreen("sports")
         }
     ),
     TabRowItem(
         title = "General",
         screen = {
-            GeneralArticleScreen("general")
+            ArticleScreen("general")
         }
     ),
     TabRowItem(
         title = "Health",
         screen = {
-            HealthArticleScreen("health")
+            ArticleScreen("health")
         }
     ),
     TabRowItem(
         title = "Science",
         screen = {
-            ScienceArticleScreen("science")
+            ArticleScreen("science")
         }
     ),
     TabRowItem(
         title = "Technology",
         screen = {
-            TechnologyArticleScreen("technology")
+            ArticleScreen("technology")
         }
     )
-// general, health, science technology
 )
 
 data class TabRowItem(

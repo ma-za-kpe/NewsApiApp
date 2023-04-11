@@ -19,20 +19,4 @@ interface ArticleDao {
   @Query("SELECT * FROM news_articles")
   fun getArticles(): Flow<List<CacheArticle>>
 
-  // business
-//  @Insert(onConflict = OnConflictStrategy.REPLACE)
-//  suspend fun insertBusinessArticles(articles: List<BusinessArticles>)
-//
-//  @Transaction
-//  @Query("SELECT * FROM business_articles ORDER BY id DESC")
-//  fun getAllBusinessArticles(): Flow<List<BusinessArticles>>
-//
-//  // sports
-//
-//  @Insert(onConflict = OnConflictStrategy.REPLACE)
-//  suspend fun insertSportsArticles(articles: List<SportsArticles>)
-//
-//  @Transaction
-//  @Query("SELECT * FROM sports_articles ORDER BY id DESC")
-//  fun getAllSportsArticles(): Flow<List<SportsArticles>>
 }

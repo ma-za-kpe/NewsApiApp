@@ -31,10 +31,12 @@ data class ArticlesViewState(
     val loading: Boolean = true,
     val business: List<DomainArticle> = emptyList(),
     val entertainment: List<DomainArticle> = emptyList(),
+    val sports: List<DomainArticle> = emptyList(),
     val general: List<DomainArticle> = emptyList(),
     val health: List<DomainArticle> = emptyList(),
     val technology: List<DomainArticle> = emptyList(),
     val science: List<DomainArticle> = emptyList(),
-    val sports: List<DomainArticle> = emptyList(),
+
+    val shared: List<DomainArticle> = emptyList(),
 )
 
