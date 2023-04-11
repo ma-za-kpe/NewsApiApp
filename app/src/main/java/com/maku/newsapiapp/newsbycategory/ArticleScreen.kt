@@ -225,7 +225,7 @@ fun ArticlePreview() {
                author = "n-tv NACHRICHTEN",
                content = "",
                description = "",
-               publishedAt =   DateTimeUtils.parse("2023-04-09T22:00:00Z"),
+               publishedAt = "2023-04-09T22:00:00Z",
                source = DomainArticle.Source(
                    id = "",
                    name = ""

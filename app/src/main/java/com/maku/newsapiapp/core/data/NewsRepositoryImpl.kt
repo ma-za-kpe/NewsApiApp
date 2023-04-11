@@ -22,12 +22,11 @@ class NewsRepositoryImpl @Inject constructor(
     private val cache: NewsCache,
     private val articleMapper: ApiArticleMapper
 ) : NewsRepository {
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getNewsFromNetwork(category: String): List<DomainArticle> {
         return withContext(Dispatchers.IO) {
             try {
                 //TODO: find a more secure way to hide keys because API keys are still recoverable by decompiling an APK => https://github.com/google/secrets-gradle-plugin
-                api.getNewsByCategory(BuildConfig.apiKey, category).articles.map {
+                api.getNewsByCategory(category,BuildConfig.apiKey).articles.map {
                     articleMapper.mapToDomain(it)
                 }
             } catch (e: HttpException) {
@@ -54,7 +53,6 @@ class NewsRepositoryImpl @Inject constructor(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun getArticlesByCategory(category: String): Flow<List<DomainArticle>> {
         return cache.getArticlesByCategory(category)
             .map { it ->
@@ -64,7 +62,6 @@ class NewsRepositoryImpl @Inject constructor(
             }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun getArticles(): Flow<List<DomainArticle>> {
         return cache.getArticles()
             .map { it ->
