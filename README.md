@@ -6,7 +6,7 @@ https://user-images.githubusercontent.com/28810111/231029193-7c9a20aa-b29c-4491-
 
 ## installation
 1. get an apiKe from => https://newsapi.org/
-2. Add it to the news api file
+2. Add it to the local.properties file as apiKey=44ccxxxxe84439e93c71434xxxx
 3. build and run the app
 
 ## Screenshots
