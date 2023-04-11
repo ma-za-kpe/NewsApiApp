@@ -37,13 +37,13 @@ open class MainViewModel @Inject constructor(
     )
 
     // TODO: initialise network data here one time (this logic should be performed during app
-    //  startup/onboarding/or splash ... basically laod the data before the user gets to home page
+    //  startup/onboarding/or splash ... basically load the data before the user gets to home page
     //  for best ux experience)... Also, this saves bandwidth (you only make network requests when you need to)
     init {
        launchCatching {
            getNews().collect { domainArticles ->
                if (domainArticles.isEmpty()) {
-                    // since we have only seven catgories, prefill the db with initial data, and load more data only when user requests, e.g during refresh
+                    // since we have only seven categories, prefill the db with initial data, and load more data only when user requests, e.g during refresh
                    categories.forEach {
                        getNetworkNews(it)
                    }

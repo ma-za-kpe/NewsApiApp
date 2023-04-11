@@ -1,9 +1,11 @@
 package com.maku.newsapiapp.newsbycategory
 
+import android.os.Build
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
@@ -53,6 +55,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.maku.newsapiapp.core.domain.model.DomainArticle
+import com.maku.newsapiapp.core.utils.DateTimeUtils
 import com.maku.newsapiapp.newsbycategory.ui.NewsByCategoryViewModel
 import com.maku.newsapiapp.ui.theme.NewsApiAppTheme
 
@@ -80,7 +83,6 @@ fun ArticleScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Article(
     article: DomainArticle,
@@ -122,7 +124,7 @@ fun Article(
                 .padding(12.dp)
         ) {
             Text(
-                article.publishedAt,
+                article.publishedAt.toString(),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Light,
             )
@@ -212,6 +214,7 @@ fun Article(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ArticlePreview() {
@@ -222,7 +225,7 @@ fun ArticlePreview() {
                author = "n-tv NACHRICHTEN",
                content = "",
                description = "",
-               publishedAt = "2023-04-09T22:00:00Z",
+               publishedAt =   DateTimeUtils.parse("2023-04-09T22:00:00Z"),
                source = DomainArticle.Source(
                    id = "",
                    name = ""

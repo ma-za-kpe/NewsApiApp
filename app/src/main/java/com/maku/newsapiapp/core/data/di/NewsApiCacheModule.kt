@@ -32,8 +32,7 @@ abstract class NewsApiCacheModule {
               context,
               NewsApiDatabase::class.java,
               "news.db"
-          )
-              .build()
+          ).build()
       }
 
       @Provides

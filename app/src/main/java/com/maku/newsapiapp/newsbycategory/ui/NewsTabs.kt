@@ -27,7 +27,6 @@ import com.maku.newsapiapp.newsbycategory.ArticleScreen
 import com.maku.newsapiapp.ui.theme.NewsApiAppTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class) // TODO: move these optIn messages to the build.gradle file
 @Composable
 fun NewsTabs(
     modifier: Modifier = Modifier,

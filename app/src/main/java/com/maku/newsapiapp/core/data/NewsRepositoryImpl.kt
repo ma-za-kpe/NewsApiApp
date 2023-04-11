@@ -1,5 +1,8 @@
 package com.maku.newsapiapp.core.data
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.maku.newsapiapp.BuildConfig
 import com.maku.newsapiapp.core.data.api.NewsApi
 import com.maku.newsapiapp.core.data.api.model.mapper.ApiArticleMapper
 import com.maku.newsapiapp.core.data.cache.model.CacheArticle
@@ -19,10 +22,12 @@ class NewsRepositoryImpl @Inject constructor(
     private val cache: NewsCache,
     private val articleMapper: ApiArticleMapper
 ) : NewsRepository {
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getNewsFromNetwork(category: String): List<DomainArticle> {
         return withContext(Dispatchers.IO) {
             try {
-                api.getNewsByCategory(category).articles.map {
+                //TODO: find a more secure way to hide keys because API keys are still recoverable by decompiling an APK => https://github.com/google/secrets-gradle-plugin
+                api.getNewsByCategory(BuildConfig.apiKey, category).articles.map {
                     articleMapper.mapToDomain(it)
                 }
             } catch (e: HttpException) {
@@ -49,6 +54,7 @@ class NewsRepositoryImpl @Inject constructor(
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun getArticlesByCategory(category: String): Flow<List<DomainArticle>> {
         return cache.getArticlesByCategory(category)
             .map { it ->
@@ -58,6 +64,7 @@ class NewsRepositoryImpl @Inject constructor(
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun getArticles(): Flow<List<DomainArticle>> {
         return cache.getArticles()
             .map { it ->

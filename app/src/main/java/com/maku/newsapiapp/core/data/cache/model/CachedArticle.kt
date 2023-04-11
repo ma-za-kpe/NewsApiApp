@@ -1,23 +1,36 @@
 package com.maku.newsapiapp.core.data.cache.model
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.maku.newsapiapp.core.domain.model.DomainArticle
-@Entity(tableName = "news_articles", indices = [Index(value = ["title"], unique = true)])
+import com.maku.newsapiapp.core.utils.DateTimeUtils
+import java.time.LocalDateTime
+
+@Entity(
+    tableName = "news_articles",
+    indices = [
+        Index(
+            value = ["title"],
+            unique = true
+        )
+    ]
+)
 data class CacheArticle(
     @PrimaryKey(autoGenerate = true)
     var id: Long,
-    val author: String? = null,
-    val content: String? = null,
-    val description: String? = null,
-    val publishedAt: String? = null,
-    val sourceId: String? = null,
-    val sourceName: String? = null,
-    val title: String? = null,
-    val url: String? = null,
-    val urlToImage: String? = null,
-    var category: String // We need to set this while caching in the db, this will help us avoid duplication of tables
+    val author: String,
+    val content: String,
+    val description: String,
+    val publishedAt: String,
+    val sourceId: String,
+    val sourceName: String,
+    val title: String,
+    val url: String,
+    val urlToImage: String,
+    var category: String
 ) {
         companion object {
         fun fromDomain(domainModel: DomainArticle): CacheArticle {
@@ -25,34 +38,35 @@ data class CacheArticle(
 
             return CacheArticle(
                 id = domainModel.id,
-                author =  domainModel?.author.orEmpty(),
-                content =  domainModel?.content.orEmpty(),
-                description =  domainModel?.description.orEmpty(),
-                publishedAt =  domainModel?.publishedAt.orEmpty(),
-                sourceId = source.id.orEmpty(),
-                sourceName = source.name.orEmpty(),
-                title =  domainModel?.title.orEmpty(),
-                url =  domainModel?.url.orEmpty(),
-                urlToImage =  domainModel?.urlToImage.orEmpty(),
-                category = domainModel?.category.orEmpty()
+                author = domainModel.author,
+                content = domainModel.content,
+                description = domainModel.description,
+                publishedAt = domainModel.publishedAt.toString(),
+                sourceId = source.id,
+                sourceName = source.name,
+                title = domainModel.title,
+                url = domainModel.url,
+                urlToImage = domainModel.urlToImage,
+                category = domainModel.category
             )
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun toDomain(): DomainArticle {
         return DomainArticle(
             id,
-            author.toString(),
-            content.toString(),
-            description.toString(),
-            publishedAt.toString(),
+            author,
+            content,
+            description,
+            DateTimeUtils.parse(publishedAt),
             DomainArticle.Source(
-                sourceId.toString(),
-                sourceName.toString()
+                sourceId,
+                sourceName
             ),
-            title.toString(),
-            url.toString(),
-            urlToImage.toString(),
+            title,
+            url,
+            urlToImage,
             category
         )
     }
