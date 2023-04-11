@@ -11,12 +11,4 @@ interface NewsRepository {
 
     fun getArticles(): Flow<List<DomainArticle>>
 
-
-    // business
-//    suspend fun storeBusinessArticles(articles: List<DomainArticle>)
-//    fun getBusinessArticlesFromCache(): Flow<List<DomainArticle>>
-//
-//    // sports
-//    suspend fun storeSportsArticles(articles: List<DomainArticle>)
-//    fun getSportsArticlesFromCache(): Flow<List<DomainArticle>>
 }

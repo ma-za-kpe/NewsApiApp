@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -64,7 +63,6 @@ fun ArticleScreen(
 ) {
     val articleViewState by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(category){
-        Log.d("TAG", "articleState categoryText: running")
         viewModel.getNewsArticlesBCategory(category)
     }
     LazyColumn {
@@ -172,6 +170,7 @@ fun Article(
 
                     Spacer(modifier = Modifier.height(8.dp))
                     if (dialogOpen) {
+                        //TODO:  Remove dialog and instead use separate screen
                         Dialog(
                             onDismissRequest = {
                                 dialogOpen = false

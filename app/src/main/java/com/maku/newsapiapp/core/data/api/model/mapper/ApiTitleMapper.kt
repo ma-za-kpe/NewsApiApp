@@ -1,7 +1,6 @@
 package com.maku.newsapiapp.core.data.api.model.mapper
 
 import com.maku.newsapiapp.core.data.api.model.Article
-import com.maku.newsapiapp.core.domain.model.DomainArticleTitle
 import javax.inject.Inject
 
 class ApiTitleMapper @Inject constructor() : ApiMapper<Article?, DomainArticleTitle> {

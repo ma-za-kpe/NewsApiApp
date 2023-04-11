@@ -8,24 +8,6 @@ import kotlinx.coroutines.flow.Flow
 class NewsCacheImpl @Inject constructor(
     private val articleDao: ArticleDao,
 ) : NewsCache {
-
-    // business
-//    override suspend fun storeBusinessArticles(articles: List<BusinessArticles>) {
-//        articleDao.insertBusinessArticles(articles)
-//    }
-//
-//    override fun getBusinessArticles(): Flow<List<BusinessArticles>> {
-//        return articleDao.getAllBusinessArticles()
-//    }
-//
-//    // sports
-//    override suspend fun storeSportsArticles(articles: List<SportsArticles>) {
-//        articleDao.insertSportsArticles(articles)
-//    }
-//
-//    override fun getSportsArticlesFromCache(): Flow<List<SportsArticles>> {
-//        return articleDao.getAllSportsArticles()
-//    }
     override suspend fun storeArticles(articles: List<CacheArticle>) {
         articleDao.insertArticles(articles)
     }

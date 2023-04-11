@@ -19,52 +19,7 @@ class NewsRepositoryImpl @Inject constructor(
     private val cache: NewsCache,
     private val articleMapper: ApiArticleMapper
 ) : NewsRepository {
-//    override suspend fun storeBusinessArticles(articles: List<DomainArticle>) {
-////        val newList = articles.toMutableList().forEach {
-////            it.author = ""
-////        }
-//        cache.storeBusinessArticles(articles.map { BusinessArticles.fromDomain(it) })
-//    }
-//
-//    override fun getBusinessArticlesFromCache(): Flow<List<DomainArticle>> {
-//        return cache.getBusinessArticles()
-//            .map { it ->
-//                it.map {
-//                    it.toDomain()
-//                }
-//            }
-//    }
-//
-//    override suspend fun storeSportsArticles(articles: List<DomainArticle>) {
-//        cache.storeSportsArticles(articles.map { SportsArticles.fromDomain(it) })
-//    }
-//
-//    override fun getSportsArticlesFromCache(): Flow<List<DomainArticle>> {
-//        return cache.getSportsArticlesFromCache()
-//            .map { it ->
-//                it.map {
-//                    it.toDomain()
-//                }
-//            }
-//    }
-
     override suspend fun getNewsFromNetwork(category: String): List<DomainArticle> {
-//        return flow {
-//            while(true) {
-//                val latestNews =  api.getNewsByCategory(category).articles.map {
-//                    articleMapper.mapToDomain(it)
-//                }
-//                emit(latestNews) // Emits the result of the request to the flow
-//            }
-//        }
-
-//        return withContext(Dispatchers.IO) {
-//            Log.d("TAG", "articles main: empty 97")
-//            api.getNewsByCategory(category).articles.map {
-//                articleMapper.mapToDomain(it)
-//            }
-//        }
-
         return withContext(Dispatchers.IO) {
             try {
                 api.getNewsByCategory(category).articles.map {
@@ -112,17 +67,3 @@ class NewsRepositoryImpl @Inject constructor(
             }
     }
 }
-
-
-//val currentStockPriceAsFlow: StateFlow<UiState> = stockPriceDataSource
-//    .latestStockList
-//    .map { stockList ->
-//        UiState.Success(stockList) as UiState
-//    }
-//    .onCompletion {
-//        Timber.tag("Flow").d("Flow has completed.")
-//    }.stateIn(
-//        scope = viewModelScope,
-//        initialValue = UiState.Loading,
-//        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000)
-//    )
