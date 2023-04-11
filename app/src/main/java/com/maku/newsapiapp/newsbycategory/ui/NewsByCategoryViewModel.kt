@@ -1,7 +1,6 @@
 package com.maku.newsapiapp.newsbycategory.ui
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import com.maku.newsapiapp.newsbycategory.domain.GetLocalNews
 import com.maku.newsapiapp.newsbycategory.domain.GetLocalNewsByCategory
 import com.maku.newsapiapp.newsbycategory.domain.GetNetworkNews

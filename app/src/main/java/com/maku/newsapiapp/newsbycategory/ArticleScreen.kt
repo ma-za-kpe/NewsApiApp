@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.maku.newsapiapp.core.domain.model.DomainArticle
 import com.maku.newsapiapp.newsbycategory.ui.NewsByCategoryViewModel
 import com.maku.newsapiapp.ui.theme.NewsApiAppTheme
@@ -144,10 +145,18 @@ fun Article(article: DomainArticle) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(15.dp)
                 ) {
-                    Text(text = "First Text")
-                    Text(text = "Second Text")
+                    if (!article.urlToImage.isEmpty() || !article.description.isEmpty()){
+                        AsyncImage(
+                            model = article.urlToImage,
+                            contentDescription = null
+                        )
+                        Text(text = article.description)
+                    }
+
+                    Text(text = "Published by: ${article.author}")
+                    Text(text = "Source by: ${article.source.name}")
                 }
 //                Text(
 //                    text = article.title,

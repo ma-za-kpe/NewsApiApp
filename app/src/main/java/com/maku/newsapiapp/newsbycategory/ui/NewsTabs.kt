@@ -32,7 +32,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun NewsTabs(
     modifier: Modifier = Modifier,
-    viewModel: NewsByCategoryViewModel = hiltViewModel(),
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()

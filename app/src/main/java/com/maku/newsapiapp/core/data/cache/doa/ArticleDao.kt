@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ArticleDao {
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insertArticles(articles: List<CacheArticle>)
 
@@ -18,5 +17,4 @@ interface ArticleDao {
 
   @Query("SELECT * FROM news_articles")
   fun getArticles(): Flow<List<CacheArticle>>
-
 }
