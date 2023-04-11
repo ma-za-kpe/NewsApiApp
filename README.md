@@ -1,0 +1,2 @@
+# NewsApiApp
+Android Assessment Projects.
