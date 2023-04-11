@@ -8,6 +8,7 @@ class ApiArticleMapper @Inject constructor() : ApiMapper<Article?, DomainArticle
 
     override fun mapToDomain(apiEntity: Article?): DomainArticle {
         return DomainArticle(
+            id = 0L,
             author = apiEntity?.author.orEmpty(),
             content = apiEntity?.content.orEmpty(),
             description = apiEntity?.description.orEmpty(),

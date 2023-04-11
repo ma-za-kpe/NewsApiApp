@@ -4,56 +4,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.maku.newsapiapp.core.domain.model.DomainArticle
-
-open class CachedArticle(
-    open var id: Long,
-    open val author: String? = null,
-    open val content: String? = null,
-    open val description: String? = null,
-    open val publishedAt: String? = null,
-    open val sourceId: String? = null,
-    open val sourceName: String? = null,
-    open val title: String? = null,
-    open val url: String? = null,
-    open val urlToImage: String? = null
-) {
-    //    companion object {
-//        fun fromDomain(domainModel: DomainArticle): CachedArticle {
-//            val source = domainModel.source
-//
-//            return CachedArticle(
-//                id = 0L,
-//                author =  domainModel?.author.orEmpty(),
-//                content =  domainModel?.content.orEmpty(),
-//                description =  domainModel?.description.orEmpty(),
-//                publishedAt =  domainModel?.publishedAt.orEmpty(),
-//                sourceId = source.id.orEmpty(),
-//                sourceName = source.name.orEmpty(),
-//                title =  domainModel?.title.orEmpty(),
-//                url =  domainModel?.url.orEmpty(),
-//                urlToImage =  domainModel?.urlToImage.orEmpty()
-//            )
-//        }
-//    }
-//
-//    fun toDomain(): DomainArticle {
-//        return DomainArticle(
-//            author.toString(),
-//            content.toString(),
-//            description.toString(),
-//            publishedAt.toString(),
-//            DomainArticle.Source(
-//                sourceId.toString(),
-//                sourceName.toString()
-//            ),
-//            title.toString(),
-//            url.toString(),
-//            urlToImage.toString()
-//        )
-//    }
-
-}
-
 @Entity(tableName = "news_articles", indices = [Index(value = ["title"], unique = true)])
 data class CacheArticle(
     @PrimaryKey(autoGenerate = true)
@@ -74,7 +24,7 @@ data class CacheArticle(
             val source = domainModel.source
 
             return CacheArticle(
-                id = 0L,
+                id = domainModel.id,
                 author =  domainModel?.author.orEmpty(),
                 content =  domainModel?.content.orEmpty(),
                 description =  domainModel?.description.orEmpty(),
@@ -91,6 +41,7 @@ data class CacheArticle(
 
     fun toDomain(): DomainArticle {
         return DomainArticle(
+            id,
             author.toString(),
             content.toString(),
             description.toString(),

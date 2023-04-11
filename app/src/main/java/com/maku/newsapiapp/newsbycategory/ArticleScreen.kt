@@ -1,6 +1,9 @@
 package com.maku.newsapiapp.newsbycategory
 
 import android.util.Log
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
@@ -8,24 +11,26 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +47,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -68,7 +76,7 @@ fun ArticleScreen(
         Log.d("TAG", "articleState categoryText: 5${articleViewState.shared}")
         items(articleViewState.shared) { article ->
             Article(
-                article
+                article,
             )
         }
     }
@@ -76,8 +84,13 @@ fun ArticleScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Article(article: DomainArticle) {
+fun Article(
+    article: DomainArticle,
+) {
     var expandedState by remember {
+        mutableStateOf(false)
+    }
+    var dialogOpen by remember {
         mutableStateOf(false)
     }
     val rotationState by animateFloatAsState(
@@ -147,24 +160,54 @@ fun Article(article: DomainArticle) {
                     modifier = Modifier
                         .padding(15.dp)
                 ) {
-                    if (!article.urlToImage.isEmpty() || !article.description.isEmpty()){
+                    if (!article.urlToImage.isEmpty() || !article.description.isEmpty()) {
                         AsyncImage(
                             model = article.urlToImage,
                             contentDescription = null
                         )
                         Text(text = article.description)
                     }
-
                     Text(text = "Published by: ${article.author}")
                     Text(text = "Source by: ${article.source.name}")
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    if (dialogOpen) {
+                        Dialog(
+                            onDismissRequest = {
+                                dialogOpen = false
+                            },
+                        ) {
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(),
+                                shape = RoundedCornerShape(size = 10.dp)
+                            ) {
+                                AndroidView(factory = {
+                                    WebView(it).apply {
+                                        layoutParams = ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.MATCH_PARENT
+                                        )
+                                        webViewClient = WebViewClient()
+                                        loadUrl(article.url)
+                                    }
+                                }, update = {
+                                    it.loadUrl(article.url)
+                                })
+                            }
+                        }
+                    }
+                    Button(
+                        onClick = {
+                            dialogOpen = true
+                        },
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary),
+                        colors = ButtonDefaults.outlinedButtonColors()
+                    ) {
+                        Text(text = "Read full article here")
+                    }
                 }
-//                Text(
-//                    text = article.title,
-//                    fontSize =  FontWeight.Normal,
-//                    fontWeight =  FontWeight.Normal,
-//                    maxLines = 4,
-//                    overflow = TextOverflow.Ellipsis
-//                )
             }
         }
     }
@@ -176,20 +219,22 @@ fun ArticlePreview() {
     NewsApiAppTheme {
         Article(
            article = DomainArticle(
-               author =  "n-tv NACHRICHTEN",
+               1L,
+               author = "n-tv NACHRICHTEN",
                content = "",
-               description =  "",
+               description = "",
                publishedAt = "2023-04-09T22:00:00Z",
                source = DomainArticle.Source(
                    id = "",
                    name = ""
                ),
-               title =  "\"Wer wird Millionär?\" als Oster-Sonderausgabe: Vier falsche Antworten verärgern Jauch - n-tv NACHRICHTEN",
+               title = "\"Wer wird Millionär?\" als Oster-Sonderausgabe: Vier falsche Antworten verärgern Jauch - n-tv NACHRICHTEN",
                url = "https://news.google.com/rss/articles/CBMihQFodHRwczovL3d3dy5uLXR2LmRlL2xldXRlL3R2L1dlci13aXJkLU1pbGxpb25hZXItYWxzLU9zdGVyLVNvbmRlcmF1c2dhYmUtVmllci1mYWxzY2hlLUFudHdvcnRlbi12ZXJhZXJnZXJuLUphdWNoLWFydGljbGUyNDA0MTA3My5odG1s0gGFAWh0dHBzOi8vYW1wLm4tdHYuZGUvbGV1dGUvdHYvV2VyLXdpcmQtTWlsbGlvbmFlci1hbHMtT3N0ZXItU29uZGVyYXVzZ2FiZS1WaWVyLWZhbHNjaGUtQW50d29ydGVuLXZlcmFlcmdlcm4tSmF1Y2gtYXJ0aWNsZTI0MDQxMDczLmh0bWw?oc=5",
                urlToImage = "",
-              category = "sport"
-           )
-        )
+               category = "sport",
+           ),
+
+            )
     }
 }
 

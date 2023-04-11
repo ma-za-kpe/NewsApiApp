@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -132,7 +131,8 @@ fun NewsTabs(
 @Composable
 fun DefaultPreview() {
     NewsApiAppTheme {
-        NewsTabs()
+        NewsTabs(
+        )
     }
 }
 
@@ -141,43 +141,43 @@ val tabRowItems = listOf(
     TabRowItem(
         title = "Business",
         screen = {
-            ArticleScreen("business")
+            ArticleScreen("business"   )
         }
     ),
     TabRowItem(
         title = "Entertainment",
         screen = {
-            ArticleScreen("entertainment")
+            ArticleScreen("entertainment"   )
         }
     ),
     TabRowItem(
         title = "Sports",
         screen = {
-            ArticleScreen("sports")
+            ArticleScreen("sports"   )
         }
     ),
     TabRowItem(
         title = "General",
         screen = {
-            ArticleScreen("general")
+            ArticleScreen("general"   )
         }
     ),
     TabRowItem(
         title = "Health",
         screen = {
-            ArticleScreen("health")
+            ArticleScreen("health"   )
         }
     ),
     TabRowItem(
         title = "Science",
         screen = {
-            ArticleScreen("science")
+            ArticleScreen("science"   )
         }
     ),
     TabRowItem(
         title = "Technology",
         screen = {
-            ArticleScreen("technology")
+            ArticleScreen("technology"   )
         }
     )
 )

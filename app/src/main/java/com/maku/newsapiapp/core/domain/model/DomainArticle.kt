@@ -1,6 +1,7 @@
 package com.maku.newsapiapp.core.domain.model
 
 data class DomainArticle(
+    val id: Long,
     val author: String,
     val content: String,
     val description: String,
